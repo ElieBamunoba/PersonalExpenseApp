@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:personalexpense_app/widgets/userTransactions.dart';
 
 import './models/transactions.dart';
 import './widgets/transactionList.dart';
 
-//https://github.com/ElieBamunoba/PersonalExpenseApp.git
 void main() {
   runApp(MyApp());
 }
@@ -37,7 +37,7 @@ class MyHomePage extends StatelessWidget {
                 elevation: 5,
               ),
             ),
-            TransactionList(),
+            UserTransaction(),
           ],
         ),
       ),
