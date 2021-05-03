@@ -3,21 +3,15 @@ import 'package:intl/intl.dart';
 
 import '../models/transactions.dart';
 
-class TransactionList extends StatefulWidget {
-  @override
-  _TransactionListState createState() => _TransactionListState();
-}
-
-class _TransactionListState extends State<TransactionList> {
-  final List<Transaction> _userTransactions = [
-    Transaction(id: "t1", title: "Shoes", amount: 10.20, date: DateTime.now()),
-    Transaction(id: "t2", title: "Shirt", amount: 50.9, date: DateTime.now()),
-  ];
+class TransactionList extends StatelessWidget {
+  List<Transaction> transaction;
+  TransactionList(this.transaction);
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: _userTransactions.map(
-        (tx) {
+    return Container(
+      height: 200,
+      child: ListView.builder(
+        itemBuilder: (context, index) {
           return Card(
             child: Row(
               children: [
@@ -33,7 +27,7 @@ class _TransactionListState extends State<TransactionList> {
                   ),
                   padding: EdgeInsets.all(10),
                   child: Text(
-                    "\$ ${tx.amount}",
+                    "\$ ${transaction[index].amount}",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -45,7 +39,7 @@ class _TransactionListState extends State<TransactionList> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      tx.title,
+                      transaction[index].title,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
@@ -53,7 +47,7 @@ class _TransactionListState extends State<TransactionList> {
                       ),
                     ),
                     Text(
-                      DateFormat.yMMMMEEEEd().format(tx.date),
+                      DateFormat.yMMMMEEEEd().format(transaction[index].date),
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 15,
@@ -66,7 +60,8 @@ class _TransactionListState extends State<TransactionList> {
             ),
           );
         },
-      ).toList(),
+        itemCount: transaction.length,
+      ),
     );
   }
 }
