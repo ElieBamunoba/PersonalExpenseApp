@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import './widgets/chart.dart';
 import './models/transactions.dart';
 import './widgets/transactionList.dart';
 import './widgets/newTransaction.dart';
@@ -13,6 +14,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Personal Expense',
+      theme: ThemeData(
+        primarySwatch: Colors.purple,
+        fontFamily: 'Quick Sand',
+      ),
       home: MyHomePage(),
     );
   }
@@ -25,9 +30,17 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final List<Transaction> _userTransactions = [
-    Transaction(id: "t1", title: "Shoes", amount: 10.20, date: DateTime.now()),
-    Transaction(id: "t2", title: "Shirt", amount: 50.9, date: DateTime.now()),
+    // Transaction(id: "t1", title: "Shoes", amount: 10.20, date: DateTime.now()),
+    // Transaction(id: "t2", title: "Shirt", amount: 50.9, date: DateTime.now()),
   ];
+  List<Transaction> get _recentTransactions {
+    return _userTransactions.where((tx) {
+      return tx.date.isAfter(
+        DateTime.now().subtract(Duration(days: 7)),
+      );
+    }).toList();
+  }
+
   void _addNewTransaction(String titleText, double amountText) {
     final newTras = Transaction(
       id: DateTime.now().toString(),
@@ -35,9 +48,11 @@ class _MyHomePageState extends State<MyHomePage> {
       amount: amountText,
       date: DateTime.now(),
     );
-    setState(() {
-      _userTransactions.add(newTras);
-    });
+    setState(
+      () {
+        _userTransactions.add(newTras);
+      },
+    );
   }
 
   void _startAddNewTransaction(BuildContext ctx) {
@@ -60,21 +75,14 @@ class _MyHomePageState extends State<MyHomePage> {
           title: Text("Personal Expense"),
           actions: [
             IconButton(
-                icon: Icon(Icons.add),
-                onPressed: () => _startAddNewTransaction(context))
+              icon: Icon(Icons.add),
+              onPressed: () => _startAddNewTransaction(context),
+            )
           ],
         ),
         body: Column(
           children: [
-            Container(
-              width: 100,
-              height: 100,
-              child: Card(
-                color: Colors.blue,
-                child: Text("Chart!"),
-                elevation: 5,
-              ),
-            ),
+            Chart(_recentTransactions),
             TransactionList(_userTransactions),
           ],
         ),

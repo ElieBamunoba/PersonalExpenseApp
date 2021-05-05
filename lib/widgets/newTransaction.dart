@@ -15,6 +15,7 @@ class _NewTrasactionState extends State<NewTrasaction> {
   final amountController = TextEditingController();
 
   void submit() {
+
     final enteredTitle = titleController.text;
     final enteredAmount = double.parse(amountController.text);
 
@@ -25,10 +26,12 @@ class _NewTrasactionState extends State<NewTrasaction> {
       enteredTitle,
       enteredAmount,
     );
+    Navigator.of(context).pop();
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Card(
       elevation: 5,
       child: Container(
