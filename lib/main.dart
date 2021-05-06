@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Personal Expense',
       theme: ThemeData(
-        primarySwatch: Colors.purple,
+        primarySwatch: Colors.blue,
         fontFamily: 'Quick Sand',
       ),
       home: MyHomePage(),
@@ -30,8 +30,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final List<Transaction> _userTransactions = [
-    // Transaction(id: "t1", title: "Shoes", amount: 10.20, date: DateTime.now()),
-    // Transaction(id: "t2", title: "Shirt", amount: 50.9, date: DateTime.now()),
+    Transaction(id: "t1", title: "Shoes", amount: 10.20, date: DateTime.now()),
+    Transaction(id: "t2", title: "Shirt", amount: 50.9, date: DateTime.now()),
   ];
   List<Transaction> get _recentTransactions {
     return _userTransactions.where((tx) {
@@ -41,12 +41,13 @@ class _MyHomePageState extends State<MyHomePage> {
     }).toList();
   }
 
-  void _addNewTransaction(String titleText, double amountText) {
+  void _addNewTransaction(
+      String titleText, double amountText, DateTime newDate) {
     final newTras = Transaction(
       id: DateTime.now().toString(),
       title: titleText,
       amount: amountText,
-      date: DateTime.now(),
+      date: newDate,
     );
     setState(
       () {
@@ -67,6 +68,14 @@ class _MyHomePageState extends State<MyHomePage> {
         });
   }
 
+  void _deleteTransaction(String id) {
+    setState(() {
+      _userTransactions.removeWhere((tx) {
+        return tx.id == id;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -80,11 +89,13 @@ class _MyHomePageState extends State<MyHomePage> {
             )
           ],
         ),
-        body: Column(
-          children: [
-            Chart(_recentTransactions),
-            TransactionList(_userTransactions),
-          ],
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Chart(_recentTransactions),
+              TransactionList(_userTransactions, _deleteTransaction),
+            ],
+          ),
         ),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
